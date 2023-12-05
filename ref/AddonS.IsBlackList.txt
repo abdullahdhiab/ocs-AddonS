@@ -1,0 +1,21 @@
+dhiab@sgshost:~/vData/sgsProjs/ocs$ curl -v -H "Content-Type: application/json" -d '{"method":"AddonS.IsBlackList","params":[{"AParty":"794050","BParty":"791010"}],"id":0}' http://localhost:9090/rpc
+* processing: http://localhost:9090/rpc
+*   Trying [::1]:9090...
+* Connected to localhost (::1) port 9090
+> POST /rpc HTTP/1.1
+> Host: localhost:9090
+> User-Agent: curl/8.2.1
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 87
+> 
+< HTTP/1.1 200 OK
+< Content-Type: application/json; charset=utf-8
+< Vary: Accept-Encoding
+< X-Content-Type-Options: nosniff
+< Date: Thu, 30 Nov 2023 16:14:26 GMT
+< Content-Length: 36
+< 
+{"result":true,"error":null,"id":0}
+* Connection #0 to host localhost left intact
+dhiab@sgshost:~/vData/sgsProjs/ocs$

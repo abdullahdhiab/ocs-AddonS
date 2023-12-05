@@ -1,0 +1,87 @@
+package api
+
+import (
+	"fmt"
+	"net"
+
+	"github.com/cenkalti/rpc2"
+	"github.com/cgrates/cgrates/utils"
+)
+
+func RPC2Server() {
+	srv := rpc2.NewServer()
+	srv.Handle("AddonS.IsBlackList",(*AddonS).IsBlackList)
+	// srv.Handle("AddonS.IsBlackList", func(client *rpc2.Client, args *AttrIsBlackList, reply *AddonS) error {
+
+		// Reversed call (server to client)
+		client *rpc2.Client
+		var rep AddonS
+		client.Call("AddonS.IsBlackList", AttrIsBlackList{"7910109", "792020"}, &rep)
+		fmt.Println("mult result:", rep)
+
+		*reply = rep
+		return nil
+	})
+
+	lis, _ := net.Listen("tcp", "127.0.0.1:5000")
+	srv.Accept(lis)
+
+}
+
+//
+/* func cRPCServer() {
+	// Create a new RPC server
+	addons := new(AddonS)
+	// Register RPC server
+	rpc.Register(addons)
+	rpc.HandleHTTP()
+	// Listen for requests on port 1234
+	rpcConn, err := net.Listen("tcp", ":2233")
+	if err != nil {
+		log.Fatal("listen error:", err)
+	}
+	http.Serve(rpcConn, nil)
+} */
+//
+func RPCServer_new() {
+	srv := utils.NewServer()
+	srv.RpcRegister(new(AddonS))
+	srv.RegisterHttpHandler("rpc", nil)
+	// srv.ServeHTTP("127.0.0.1",)
+}
+//
+//
+
+func RPCServer() {
+	// Create a new RPC server
+	addons := new(AddonS)
+	// Register RPC server
+	rpc.NewServer()
+	rpc.Register(addons)
+	// rpc.HandleHTTP("AddonS.IsBlackList", "/debug")
+	rpc.HandleHTTP()
+	//Handle("/", rpc)
+	// Listen for requests on port 1234
+	rpcConn, err := net.Listen("tcp", ":2233")
+	if err != nil {
+		log.Fatal("listen error:", err)
+	}
+
+	http.Serve(rpcConn, nil)
+}
+
+func RPCClient() {
+	var reply bool
+	args := AttrIsBlackList{"791020", "791010"}
+	client, err := rpc.DialHTTP("tcp", "localhost"+":3232")
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+	err = client.Call("AddonS.IsBlackList", args, &reply)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
+	log.Printf("%v", reply)
+}
+
+//
